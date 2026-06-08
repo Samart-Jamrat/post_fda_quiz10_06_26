@@ -152,6 +152,22 @@
       border-radius: 12px;
       border: 1px solid #e5e7eb;
     }
+
+    .question-text {
+      margin: 0 0 14px 0;
+    }
+    
+    .question-main {
+      margin-bottom: 8px;
+    }
+    
+    .question-sub {
+      margin-left: 24px;
+      margin-top: 4px;
+      padding-left: 10px;
+      border-left: 3px solid #e2e8f0;
+      color: #334155;
+    }
   </style>
 </head>
 
@@ -397,6 +413,25 @@
       });
     }
 
+    function formatQuestionText(text) {
+      const lines = String(text || "")
+        .split("\n")
+        .map(line => line.trim())
+        .filter(line => line);
+    
+      if (lines.length === 0) return "";
+    
+      let html = `<div class="question-text">`;
+      html += `<div class="question-main">${escapeHtml(lines[0])}</div>`;
+    
+      for (let i = 1; i < lines.length; i++) {
+        html += `<div class="question-sub">${escapeHtml(lines[i])}</div>`;
+      }
+    
+      html += `</div>`;
+      return html;
+    }
+
     function renderQuestions() {
       const form = document.getElementById("quizForm");
       form.innerHTML = "";
@@ -405,7 +440,7 @@
         const div = document.createElement("div");
         div.className = "question";
 
-        let html = `<h3>ข้อ ${index + 1}</h3><p>${escapeHtml(q.text)}</p>`;
+        let html = `<h3>ข้อ ${index + 1}</h3>${formatQuestionText(q.text)}`;
 
         if (q.image) {
           html += imageHtml(q.image, "รูปประกอบคำถาม");
